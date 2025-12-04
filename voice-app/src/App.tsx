@@ -1,15 +1,16 @@
 import { ConnectionStatus } from './components/ConnectionStatus'
+import { MicrophoneControl } from './components/MicrophoneControl'
 import './App.css'
 
 /**
- * Voice Testing Centre - Phase 1: Connection Proof
+ * Voice Testing Centre - Phase 2: STT Proof
  *
- * Goal: Establish Hume WebSocket connection and display status
+ * Goal: Prove speech-to-text transcription works
  *
  * Success Criteria:
- * - Status indicator shows connection state
- * - Can connect/disconnect reliably
- * - Errors are displayed clearly
+ * - Microphone captures audio
+ * - Speech is transcribed accurately
+ * - Transcriptions display in UI
  */
 function App() {
   return (
@@ -18,7 +19,6 @@ function App() {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'center',
       padding: '2rem',
       backgroundColor: '#242424'
     }}>
@@ -34,10 +34,11 @@ function App() {
         marginBottom: '2rem',
         fontSize: '0.875rem'
       }}>
-        Phase 1: Connection Proof
+        Hume AI + Anthropic Integration Proof
       </p>
 
       <ConnectionStatus />
+      <MicrophoneControl />
 
       <footer style={{
         marginTop: '3rem',
