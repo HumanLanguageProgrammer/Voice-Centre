@@ -1,11 +1,17 @@
 import { useVoice } from '@humeai/voice-react';
 
+interface ConnectionStatusProps {
+  configId?: string;
+  configLabel?: string;
+}
+
 /**
  * ConnectionStatus - Displays the current WebSocket connection state
  *
  * Phase 1 Goal: Prove we can establish and monitor a Hume WebSocket connection
+ * Phase 5 Update: Accepts configId to switch between Hume LLM and Claude LLM
  */
-export function ConnectionStatus() {
+export function ConnectionStatus({ configId, configLabel }: ConnectionStatusProps) {
   const { status, readyState, error, connect, disconnect } = useVoice();
 
   // Map status to visual indicator
@@ -47,9 +53,17 @@ export function ConnectionStatus() {
       return;
     }
 
-    connect({
+    const connectOptions: Parameters<typeof connect>[0] = {
       auth: { type: 'apiKey', value: apiKey }
-    })
+    };
+
+    // Add configId if provided (for Custom LLM)
+    if (configId) {
+      connectOptions.configId = configId;
+      console.log('[Hume] Connecting with config:', configId);
+    }
+
+    connect(connectOptions)
       .then(() => {
         console.log('[Hume] Connection initiated');
       })
@@ -74,6 +88,21 @@ export function ConnectionStatus() {
       <h2 style={{ margin: '0 0 1rem 0', fontSize: '1.25rem' }}>
         Hume WebSocket Connection
       </h2>
+
+      {/* Config indicator */}
+      {configLabel && (
+        <div style={{
+          padding: '0.5rem 0.75rem',
+          backgroundColor: configId ? '#1a2e1a' : '#2e2e1a',
+          border: `1px solid ${configId ? '#22c55e' : '#eab308'}`,
+          borderRadius: '4px',
+          marginBottom: '1rem',
+          fontSize: '0.75rem',
+          color: configId ? '#22c55e' : '#eab308'
+        }}>
+          LLM: {configLabel}
+        </div>
+      )}
 
       {/* API Key Warning */}
       {!apiKey && (
@@ -175,7 +204,8 @@ export function ConnectionStatus() {
   status: status.value,
   readyState,
   hasError: !!error,
-  apiKeyPresent: !!apiKey
+  apiKeyPresent: !!apiKey,
+  configId: configId || 'default'
 }, null, 2)}
         </pre>
       </details>
