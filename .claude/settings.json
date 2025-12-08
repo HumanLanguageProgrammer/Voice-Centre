@@ -1,0 +1,5 @@
+{
+  "plugins": [
+    "anthropics/claude-code/plugins/frontend-design"
+  ]
+}
